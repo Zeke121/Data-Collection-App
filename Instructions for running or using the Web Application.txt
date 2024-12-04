@@ -1,0 +1,93 @@
+1. Start the Web Application
+- Open a terminal or command prompt.
+- Navigate to the folder containing your application code:
+
+bash
+cd "path/to/your/application"
+
+Run the application:
+
+bash
+python app.py
+
+You should see output similar to this:
+csharp
+* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+Open a web browser and go to http://127.0.0.1:5000/.
+
+2. Manage Clients
+View Clients
+On the homepage, click the "Clients" link or navigate to http://127.0.0.1:5000/clients.
+You will see a list of all clients with columns:
+- Name
+- Client Code
+- Number of Linked Contacts
+
+Add a New Client
+- Click "Add Client" or navigate to http://127.0.0.1:5000/clients/new.
+- Fill in the "Client Name" field and submit the form.
+- The application will generate a unique client code and add the client to the database.
+
+Edit a Client
+- Click the "Edit" button next to a client or navigate to the Edit Client page.
+- Update the client name and save changes.
+
+Delete a Client
+- Click the "Delete" button next to a client.
+- The client and its associated links will be removed from the database.
+
+Link Contacts to a Client
+- Go to a client's details page (via the "Edit" button).
+- Use the dropdown to select a contact and link it to the client.
+- The linked contact will appear in the list below.
+
+Unlink Contacts from a Client
+- On the client's details page, find the linked contact in the list.
+- Click the "Unlink" button to remove the association.
+
+3. Manage Contacts
+View Contacts
+On the homepage, click the "Contacts" link or navigate to http://127.0.0.1:5000/contacts.
+You will see a list of all contacts with columns:
+- Full Name (Surname + Name)
+- Email Address
+- Number of Linked Clients
+
+Add a New Contact
+Click "Add Contact" or navigate to http://127.0.0.1:5000/contacts/new.
+Fill in the fields:
+- First Name
+- Surname
+- Email Address
+Submit the form. The email must be unique.
+
+Edit a Contact
+- Click the "Edit" button next to a contact or navigate to the Edit Contact page.
+- Update the contact's details and save changes.
+
+Delete a Contact
+- Click the "Delete" button next to a contact.
+- The contact and its associated links will be removed from the database.
+
+Link Clients to a Contact
+- Go to a contact's details page (via the "Edit" button).
+- Use the dropdown to select a client and link it to the contact.
+- The linked client will appear in the list below.
+
+Unlink Clients from a Contact
+- On the contact's details page, find the linked client in the list.
+- Click the "Unlink" button to remove the association.
+
+4. Search and Pagination
+Search Clients or Contacts
+- Use the search bar at the top of the Clients or Contacts page.
+- Enter a name or partial name, and press "Search".
+- The application will display matching results.
+
+Navigate Between Pages
+- If there are many clients or contacts, use the pagination controls at the bottom of the page.
+- Click "Next" or "Previous" to move between pages.
+
+5. Shut Down the Application
+- Return to the terminal where the application is running.
+- Press Ctrl+C to stop the server.
