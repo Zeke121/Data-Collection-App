@@ -1,11 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Create Client</h1>
-<form id="clientForm" method="POST" action="{{ url_for('create_client') }}">
-    <div class="mb-3">
-        <label for="name" class="form-label">Client Name</label>
-        <input type="text" class="form-control" id="name" name="name" required>
+<div class="card">
+    <div class="card-header">
+        <h3>{% if editing %}Edit Client{% else %}Create Client{% endif %}</h3>
     </div>
-    <button type="submit" class="btn btn-success">Submit</button>
-</form>
+    <div class="card-body">
+        <form id="clientForm" method="POST" action="{% if editing %}{{ url_for('edit_client', id=client.id) }}{% else %}{{ url_for('create_client') }}{% endif %}">
+            <div class="mb-3">
+                <label for="name" class="form-label">Client Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{% if editing %}{{ client.name }}{% endif %}" placeholder="Enter client name" required>
+                <div class="invalid-feedback">
+                    Client name is required.
+                </div>
+            </div>
+            {% if editing %}
+            <div class="mb-3">
+                <label for="code" class="form-label">Client Code</label>
+                <input type="text" class="form-control" id="code" name="code" value="{{ client.code }}" readonly>
+            </div>
+            {% endif %}
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+// JavaScript validation for the form
+document.getElementById('clientForm').addEventListener('submit', function(e) {
+    let isValid = true;
+    const nameField = document.getElementById('name');
+
+    if (nameField.value.trim() === '') {
+        nameField.classList.add('is-invalid');
+        isValid = false;
+    } else {
+        nameField.classList.remove('is-invalid');
+    }
+
+    if (!isValid) {
+        e.preventDefault(); // Prevent form submission if validation fails
+    }
+});
+</script>
 {% endblock %}

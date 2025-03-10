@@ -1,37 +1,70 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Create Contact</h1>
-<form id="contactForm" method="POST" action="{{ url_for('create_contact') }}">
-    <div class="mb-3">
-        <label for="name" class="form-label">First Name</label>
-        <input type="text" class="form-control" id="name" name="name" required>
+<div class="card">
+    <div class="card-header">
+        <h3>{% if editing %}Edit Contact{% else %}Create Contact{% endif %}</h3>
     </div>
-    <div class="mb-3">
-        <label for="surname" class="form-label">Surname</label>
-        <input type="text" class="form-control" id="surname" name="surname" required>
+    <div class="card-body">
+        <form id="contactForm" method="POST" action="{% if editing %}{{ url_for('edit_contact', id=contact.id) }}{% else %}{{ url_for('create_contact') }}{% endif %}">
+            <div class="mb-3">
+                <label for="name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{% if editing %}{{ contact.name }}{% endif %}" placeholder="Enter first name" required>
+            </div>
+            <div class="mb-3">
+                <label for="surname" class="form-label">Surname</label>
+                <input type="text" class="form-control" id="surname" name="surname" value="{% if editing %}{{ contact.surname }}{% endif %}" placeholder="Enter surname" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{% if editing %}{{ contact.email }}{% endif %}" placeholder="Enter email address" required>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
     </div>
-    <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" required>
-    </div>
-    <button type="submit" class="btn btn-success">Submit</button>
-</form>
+</div>
 
 <script>
-document.getElementById('contactForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const response = await fetch(e.target.action, {
-        method: 'POST',
-        body: formData
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        const emailField = document.getElementById('email');
+        const emailValue = emailField.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+        if (!emailRegex.test(emailValue)) {
+            e.preventDefault(); // Stop form submission
+            alert('Please enter a valid email address.');
+        }
     });
+    </script>
+    
+<script>
+// Submit form using AJAX
+document.getElementById('contactForm').addEventListener('submit', async function (e) {
+    e.preventDefault(); // Prevent default form submission
+    const form = e.target;
+    const formData = new FormData(form);
 
-    if (response.ok) {
-        alert('Contact added successfully!');
-        window.location.href = '/contacts';
-    } else {
-        alert('Failed to add contact. Please try again.');
+    try {
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: formData,
+        });
+
+        if (response.ok) {
+            const message = await response.json();
+            alert(message.message || 'Contact saved successfully!');
+            window.location.href = '/contacts/page/1'; // Redirect after successful submission
+        } else if (response.headers.get('Content-Type').includes('application/json')) {
+            const error = await response.json();
+            alert(error.message || 'Failed to save contact. Please try again.');
+        } else {
+            // Handle unexpected non-JSON response
+            alert('An unexpected error occurred. Please check the server.');
+        }
+    } catch (err) {
+        console.error('AJAX Error:', err);
+        alert('An error occurred. Please try again later.');
     }
 });
+
 </script>
 {% endblock %}
